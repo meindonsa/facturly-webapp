@@ -65,13 +65,6 @@ onMounted(initForm)
             required
             @update:model-value="markDirty"
           />
-          <AppInput
-            v-model="form.tax_id"
-            label="N° fiscal / RCCM"
-            placeholder="GA-LBV-2024-B-12345"
-            icon="bx bx-id-card"
-            @update:model-value="markDirty"
-          />
         </div>
       </section>
 

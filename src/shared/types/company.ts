@@ -11,7 +11,6 @@ export interface Company {
   address: string | null
   city: string | null
   country: string | null
-  tax_id: string | null
   logo_url: string | null
   currency: string
   created_at: string
