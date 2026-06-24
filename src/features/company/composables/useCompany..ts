@@ -12,7 +12,6 @@ interface CompanyForm {
   address: string | null
   city: string | null
   country: string | null
-  tax_id: string | null
   currency: string
 }
 
@@ -26,7 +25,6 @@ export function useCompany() {
     address: null,
     city: null,
     country: null,
-    tax_id: null,
     currency: 'XAF',
   })
 
@@ -44,7 +42,6 @@ export function useCompany() {
       address: c.address ?? null,
       city: c.city ?? null,
       country: c.country ?? null,
-      tax_id: c.tax_id ?? null,
       currency: c.currency ?? 'XAF',
     }
   }
