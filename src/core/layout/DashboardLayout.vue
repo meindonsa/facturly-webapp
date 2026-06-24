@@ -2,7 +2,7 @@
 import { useAuthStore } from '@/core/stores/auth'
 import { useCompanyStore } from '@/core/stores/company'
 import { onMounted } from 'vue'
-import AppNav from '@/shared/components/AppNav.vue'
+import AppNav from '@/core/layout/AppNav.vue'
 
 const authStore = useAuthStore()
 const companyStore = useCompanyStore()
