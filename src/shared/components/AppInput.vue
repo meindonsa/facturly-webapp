@@ -1,9 +1,24 @@
 <script setup lang="ts">
+// ============================================================
+// AppInput — champ de formulaire réutilisable
+//
+// Props :
+//   modelValue : valeur (v-model)
+//   label      : libellé au-dessus
+//   type       : text | email | password | number | tel | date (défaut: text)
+//   placeholder
+//   error      : message d'erreur (affiche le champ en rouge)
+//   hint       : texte d'aide sous le champ
+//   disabled
+//   required
+//   icon       : classe boxicons à gauche dans le champ
+// ============================================================
+
 import { computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: string | number
+    modelValue: string | number | null
     label?: string
     type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'date'
     placeholder?: string
@@ -21,14 +36,14 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
+  'update:modelValue': [value: string | number | null]
 }>()
 
 const hasError = computed(() => !!props.error)
 
 function onInput(e: Event) {
   const val = (e.target as HTMLInputElement).value
-  emit('update:modelValue', props.type === 'number' ? Number(val) : val)
+  emit('update:modelValue', props.type === 'number' ? Number(val) : val || null)
 }
 </script>
 
@@ -52,7 +67,7 @@ function onInput(e: Event) {
       />
       <input
         :type="type"
-        :value="modelValue"
+        :value="modelValue ?? ''"
         :placeholder="placeholder"
         :disabled="disabled"
         :required="required"

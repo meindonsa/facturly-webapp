@@ -18,6 +18,9 @@ export interface Company {
   updated_at: string
 }
 
-export type CompanyPayload = Omit<Company, 'id' | 'owner_id' | 'created_at' | 'updated_at'>
+export type CompanyPayload = Omit<
+  Company,
+  'id' | 'owner_id' | 'logo_url' | 'created_at' | 'updated_at'
+>
 
 export type CompanyUpdatePayload = Partial<CompanyPayload>
