@@ -1,12 +1,5 @@
 import { SecurityStorage } from '@meindonsa/security-storage'
-
-// ============================================================
-// STORAGE — gestion des tokens via @meindonsa/security-storage
-// Les données sont chiffrées + compressées avant d'être
-// stockées en localStorage. Point d'entrée unique pour les tokens.
-// ============================================================
-
-const storage = new SecurityStorage(import.meta.env.VITE_STORAGE_KEY as string)
+const storage = new SecurityStorage()
 
 const KEYS = {
   ACCESS_TOKEN: 'fct_access_token',
