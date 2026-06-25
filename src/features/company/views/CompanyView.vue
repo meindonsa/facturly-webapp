@@ -5,19 +5,18 @@ import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
 import { useCompany } from '@/features/company/composables/useCompany..ts'
 
-const { form, isDirty, success, loading, error, company, initForm, markDirty, submit } = useCompany()
+const { form, isDirty, success, loading, error, company, initForm, markDirty, submit } =
+  useCompany()
 
 onMounted(initForm)
 </script>
 
 <template>
   <div class="flex flex-col min-h-full">
-
     <!-- Topbar -->
     <AppTopbar title="Mon entreprise" />
 
     <form class="flex-1 flex flex-col gap-5 p-4" @submit.prevent="submit">
-
       <!-- Succès -->
       <div
         v-if="success"
@@ -101,11 +100,7 @@ onMounted(initForm)
         <p class="section-label">Facturation</p>
         <div class="field">
           <label class="field-label">Devise</label>
-          <select
-            v-model="form.currency"
-            class="field-input"
-            @change="markDirty"
-          >
+          <select v-model="form.currency" class="field-input" @change="markDirty">
             <option value="XAF">XAF — Franc CFA (BEAC)</option>
             <option value="XOF">XOF — Franc CFA (BCEAO)</option>
             <option value="EUR">EUR — Euro</option>
@@ -116,13 +111,7 @@ onMounted(initForm)
 
       <!-- Actions -->
       <div class="pb-4">
-        <AppButton
-          type="submit"
-          :loading="loading"
-          :disabled="!isDirty"
-          icon="bx bx-save"
-          full
-        >
+        <AppButton type="submit" :loading="loading" :disabled="!isDirty" icon="bx bx-save" full>
           {{ company ? 'Enregistrer les modifications' : 'Créer mon entreprise' }}
         </AppButton>
       </div>
