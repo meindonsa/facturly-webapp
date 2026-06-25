@@ -4,6 +4,7 @@ import AppTopbar from '@/core/layout/AppTopbar.vue'
 import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
 import { useCompany } from '@/features/company/composables/useCompany..ts'
+import LogoUpload from '@/features/company/components/LogoUpload.vue'
 
 const { form, isDirty, success, loading, error, company, initForm, markDirty, submit } =
   useCompany()
@@ -34,6 +35,11 @@ onMounted(initForm)
         <i class="bx bx-error-circle text-red-500 text-lg" aria-hidden="true" />
         <p class="text-sm text-red-600">{{ error }}</p>
       </div>
+
+      <!-- Logo -->
+      <section>
+        <LogoUpload />
+      </section>
 
       <!-- Infos principales -->
       <section>
