@@ -4,9 +4,9 @@
 // ============================================================
 
 import { computed } from 'vue'
-import AppInput from '@/shared/components/AppInput.vue'
 import { formatFCFA } from '@/shared/types'
 import type { InvoiceItemPayload } from '@/shared/types'
+import AppInput from '@/shared/components/AppInput.vue'
 
 const props = defineProps<{
   modelValue: InvoiceItemPayload
@@ -18,16 +18,14 @@ const emit = defineEmits<{
   remove: []
 }>()
 
-function update(field: keyof InvoiceItemPayload, value: string | number) {
-  const updated = { ...props.modelValue, [field]: value }
+function update(field: keyof InvoiceItemPayload, value: string | number | null) {
+  const updated = { ...props.modelValue, [field]: value ?? 0 }
   // Recalcul du total de la ligne
-  updated.total = Math.round(Number(updated.quantity) * Number(updated.unit_price))
+  updated.total = Number(updated.quantity) * Number(updated.unit_price)
   emit('update:modelValue', updated)
 }
 
-const lineTotal = computed(() =>
-  Math.round(props.modelValue.quantity * props.modelValue.unit_price),
-)
+const lineTotal = computed(() => props.modelValue.quantity * props.modelValue.unit_price)
 </script>
 
 <template>
@@ -66,7 +64,7 @@ const lineTotal = computed(() =>
       />
       <AppInput
         :model-value="modelValue.unit_price"
-        label="Prix unitaire (FCFA)"
+        label="Prix unitaire"
         type="number"
         placeholder="0"
         required

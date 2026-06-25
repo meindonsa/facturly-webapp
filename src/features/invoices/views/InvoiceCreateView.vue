@@ -13,17 +13,23 @@ const props = defineProps<{ id?: string; isEdit?: boolean }>()
 const router = useRouter()
 const { invoice, fetchInvoice, createInvoice, saving, error } = useInvoice()
 
+function generateInvoiceNumber(): string {
+  const today = new Date()
+  const date = today.toISOString().split('T')[0]?.replace(/-/g, '') ?? ''
+  const random = Math.floor(1000 + Math.random() * 9000)
+  return `FAC-${date}-${random}`
+}
+
 // ── Formulaire facture ────────────────────────────────────────
 
 const form = ref({
-  invoice_number: '',
+  invoice_number: generateInvoiceNumber(),
   status: 'draft' as InvoiceStatus,
   client_name: '',
   client_email: '',
+  client_phone: '',
   client_address: '',
-  client_tax_id: '',
   issued_at: new Date().toISOString().split('T')[0] as string,
-  due_at: '',
   delivery_amount: 0,
   notes: '',
 })
@@ -48,9 +54,7 @@ function updateItem(index: number, value: InvoiceItemPayload) {
 
 // ── Totaux calculés ───────────────────────────────────────────
 
-const totals = computed(() =>
-  computeInvoiceTotals(itemRows.value, form.value.delivery_amount * 100),
-)
+const totals = computed(() => computeInvoiceTotals(itemRows.value, form.value.delivery_amount))
 
 // ── Mode édition ──────────────────────────────────────────────
 
@@ -63,11 +67,10 @@ onMounted(async () => {
         status: invoice.value.status,
         client_name: invoice.value.client_name,
         client_email: invoice.value.client_email ?? '',
+        client_phone: invoice.value.client_phone,
         client_address: invoice.value.client_address ?? '',
-        client_tax_id: invoice.value.client_tax_id ?? '',
         issued_at: invoice.value.issued_at,
-        due_at: invoice.value.due_at ?? '',
-        delivery_amount: invoice.value.delivery_amount / 100,
+        delivery_amount: invoice.value.delivery_amount,
         notes: invoice.value.notes ?? '',
       }
     }
@@ -83,14 +86,13 @@ async function submit() {
       status: form.value.status,
       client_name: form.value.client_name,
       client_email: form.value.client_email || null,
+      client_phone: form.value.client_phone,
       client_address: form.value.client_address || null,
-      client_tax_id: form.value.client_tax_id || null,
       issued_at: form.value.issued_at,
-      due_at: form.value.due_at || null,
       notes: form.value.notes || null,
     },
     itemRows.value,
-    form.value.delivery_amount * 100,
+    form.value.delivery_amount,
   )
   if (created) await router.push(`/invoices/${created.id}`)
 }
@@ -120,12 +122,10 @@ async function submit() {
             label="Numéro de facture"
             placeholder="FAC-2024-001"
             icon="bx bx-hash"
-            required
+            :hint="'Généré automatiquement'"
+            disabled
           />
-          <div class="grid grid-cols-2 gap-3">
-            <AppInput v-model="form.issued_at" label="Date d'émission" type="date" required />
-            <AppInput v-model="form.due_at" label="Échéance" type="date" />
-          </div>
+          <AppInput v-model="form.issued_at" label="Date d'émission" type="date" required />
         </div>
       </section>
 
@@ -148,16 +148,18 @@ async function submit() {
             icon="bx bx-envelope"
           />
           <AppInput
+            v-model="form.client_phone"
+            label="Téléphone"
+            type="tel"
+            placeholder="+24177101010"
+            icon="bx bx-phone"
+            required
+          />
+          <AppInput
             v-model="form.client_address"
             label="Adresse"
             placeholder="Libreville, Gabon"
             icon="bx bx-map"
-          />
-          <AppInput
-            v-model="form.client_tax_id"
-            label="N° fiscal / RCCM"
-            placeholder="Optionnel"
-            icon="bx bx-id-card"
           />
         </div>
       </section>
@@ -165,7 +167,7 @@ async function submit() {
       <!-- Lignes -->
       <section>
         <div class="flex items-center justify-between mb-3">
-          <p class="section-label !mb-0">Lignes</p>
+          <p class="section-label mb-0!">Lignes</p>
           <button
             type="button"
             class="text-sm text-primary-600 font-medium flex items-center gap-1"
@@ -194,7 +196,7 @@ async function submit() {
         <div class="flex flex-col gap-3">
           <AppInput
             v-model="form.delivery_amount"
-            label="Frais de livraison (FCFA)"
+            label="Frais de livraison"
             type="number"
             placeholder="0"
             icon="bx bx-package"

@@ -44,13 +44,12 @@ export interface Invoice {
 
   // Destinataire
   client_name: string
+  client_phone: string
   client_email: string | null
   client_address: string | null
-  client_tax_id: string | null
 
   // Dates
   issued_at: string
-  due_at: string | null
 
   // Montants (en centimes)
   total_product: number // SUM(items.quantity)
@@ -73,9 +72,9 @@ export type InvoiceUpdatePayload = Partial<InvoicePayload>
 // ── Helpers ──────────────────────────────────────────────────
 
 /** Formate un montant en centimes vers un affichage FCFA */
-export function formatFCFA(centimes: number): string {
+export function formatFCFA(amount: number): string {
   return (
-    (centimes / 100).toLocaleString('fr-FR', {
+    amount.toLocaleString('fr-FR', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }) + ' F'
@@ -87,7 +86,7 @@ export function computeInvoiceTotals(
   items: InvoiceItemPayload[],
   deliveryAmount = 0,
 ): Pick<Invoice, 'total_product' | 'total_product_amount' | 'delivery_amount' | 'total'> {
-  const total_product = items.reduce((sum, i) => sum + i.quantity, 0)
+  const total_product = items.reduce((sum, i) => sum + Number(i.quantity), 0)
   const total_product_amount = items.reduce((sum, i) => sum + i.total, 0)
   const total = total_product_amount + deliveryAmount
 

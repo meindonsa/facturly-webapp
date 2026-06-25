@@ -80,10 +80,6 @@ function formatDate(date: string) {
             <span class="text-neutral-400">Émise le</span>
             <span class="text-neutral-900">{{ formatDate(invoice.issued_at) }}</span>
           </div>
-          <div v-if="invoice.due_at" class="flex justify-between text-sm">
-            <span class="text-neutral-400">Échéance</span>
-            <span class="text-neutral-900">{{ formatDate(invoice.due_at) }}</span>
-          </div>
           <div v-if="invoice.client_email" class="flex justify-between text-sm">
             <span class="text-neutral-400">Email client</span>
             <span class="text-neutral-900">{{ invoice.client_email }}</span>

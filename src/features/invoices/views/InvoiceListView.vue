@@ -8,8 +8,7 @@ import AppLoader from '@/shared/components/AppLoader.vue'
 import AppEmpty from '@/shared/components/AppEmpty.vue'
 
 const router = useRouter()
-const { loading, error, statusFilter, filteredInvoices, fetchInvoices } =
-  useInvoice()
+const { loading, error, statusFilter, filteredInvoices, fetchInvoices } = useInvoice()
 
 onMounted(fetchInvoices)
 
@@ -90,14 +89,6 @@ const filters: { label: string; value: string }[] = [
         :invoice="inv"
         @click="router.push(`/invoices/${inv.id}`)"
       />
-    </div>
-
-    <!-- FAB -->
-    <div class="px-4 pb-4 mt-auto">
-      <button class="fab w-full" @click="router.push('/invoices/create')">
-        <i class="bx bx-plus text-xl" aria-hidden="true" />
-        Nouvelle facture
-      </button>
     </div>
   </div>
 </template>

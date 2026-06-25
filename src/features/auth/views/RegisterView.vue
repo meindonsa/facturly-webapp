@@ -3,7 +3,6 @@ import { useAuth } from '../composables/useAuth'
 import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
 
-
 const { registerForm, passwordMismatch, loading, error, submitRegister } = useAuth()
 </script>
 

@@ -69,7 +69,7 @@ const { loading, error, metrics, recentInvoices, formatFCFA } = useHome()
     </div>
 
     <!-- FAB -->
-    <div class="px-4 pb-4 mt-auto">
+    <div class="px-4 pb-4 mt-auto flex justify-center">
       <button class="fab w-full" @click="router.push('/invoices/create')">
         <i class="bx bx-plus text-xl" aria-hidden="true" />
         Nouvelle facture
