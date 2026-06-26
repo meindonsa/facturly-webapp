@@ -9,12 +9,14 @@ const { loginForm, showPassword, loading, error, submitLogin } = useAuth()
 <template>
   <div class="min-h-dvh bg-white flex flex-col">
     <!-- En-tête -->
-    <div class="px-6 pt-16 pb-8">
-      <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center mb-6">
-        <i class="bx bx-file text-white text-xl" aria-hidden="true" />
+    <div class="px-6 pt-18 mb-10 flex items-center">
+      <div class="w-20 h-20 rounded-xl flex items-center justify-center">
+        <img src="/logo.png" alt="Logo" class="w-full ml-2" />
       </div>
-      <h1 class="text-2xl font-medium text-neutral-900">Connexion</h1>
-      <p class="text-sm text-neutral-400 mt-1">Bienvenue sur Facturly</p>
+      <div class="ml-5">
+        <h1 class="text-2xl font-medium text-neutral-900">Connexion</h1>
+        <p class="text-sm text-neutral-400 mt-1">Bienvenue sur Facturly</p>
+      </div>
     </div>
 
     <!-- Formulaire -->
@@ -50,10 +52,11 @@ const { loginForm, showPassword, loading, error, submitLogin } = useAuth()
         />
         <button
           type="button"
-          class="text-xs text-primary-600 self-end mt-1"
+          class="text-xs text-primary-600 self-end mt-1 showPasswordBtn"
           @click="showPassword = !showPassword"
         >
-          {{ showPassword ? 'Masquer' : 'Afficher' }}
+          <i v-if="showPassword" class="bx bx-hide text-xl" />
+          <i v-else class="bx bx-show text-xl" />
         </button>
       </div>
 
@@ -74,3 +77,12 @@ const { loginForm, showPassword, loading, error, submitLogin } = useAuth()
     </p>
   </div>
 </template>
+
+<style scoped>
+.showPasswordBtn{
+  z-index: 2;
+  margin-top: -35px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+</style>
