@@ -2,16 +2,17 @@
 import { useRouter } from 'vue-router'
 import AppTopbar from '@/core/layout/AppTopbar.vue'
 import { useHome } from '../composables/useHome'
+import MetricCard from '../components/MetricCard.vue'
+import RecentInvoiceList from '../components/RecentInvoiceList.vue'
 import AppLoader from '@/shared/components/AppLoader.vue'
-import MetricCard from '@/features/home/components/MetricCard.vue'
-import RecentInvoiceList from '@/features/home/components/RecentInvoiceList.vue'
 
 const router = useRouter()
-const { loading, error, metrics, recentInvoices, formatFCFA } = useHome()
+const { loading, error, statistics, recentInvoices, formatFCFA } = useHome()
 </script>
 
 <template>
   <div class="flex flex-col min-h-full">
+    <!-- Topbar -->
     <AppTopbar show-greeting>
       <template #actions>
         <button class="icon-btn" aria-label="Notifications">
@@ -23,6 +24,7 @@ const { loading, error, metrics, recentInvoices, formatFCFA } = useHome()
       </template>
     </AppTopbar>
 
+    <!-- Loader -->
     <AppLoader v-if="loading" full text="Chargement..." />
 
     <!-- Contenu -->
@@ -33,17 +35,17 @@ const { loading, error, metrics, recentInvoices, formatFCFA } = useHome()
         <div class="grid grid-cols-2 gap-3">
           <MetricCard
             label="Encaissé"
-            :value="formatFCFA(metrics.totalPaidMonth)"
+            :value="formatFCFA(statistics.totalPaidMonth)"
             sub="FCFA ce mois"
             accent
           />
           <MetricCard
             label="En attente"
-            :value="formatFCFA(metrics.totalPendingMonth)"
+            :value="formatFCFA(statistics.totalPending)"
             sub="FCFA à recevoir"
           />
-          <MetricCard label="Factures" :value="String(metrics.countMonth)" sub="ce mois" />
-          <MetricCard label="Impayées" :value="String(metrics.countOverdue)" sub="en retard" />
+          <MetricCard label="Factures" :value="String(statistics.countMonth)" sub="ce mois" />
+          <MetricCard label="Impayées" :value="String(statistics.countOverdue)" sub="en retard" />
         </div>
       </section>
 
@@ -69,7 +71,7 @@ const { loading, error, metrics, recentInvoices, formatFCFA } = useHome()
     </div>
 
     <!-- FAB -->
-    <div class="px-4 pb-4 mt-auto flex justify-center">
+    <div class="px-4 pb-4 mt-auto">
       <button class="fab w-full" @click="router.push('/invoices/create')">
         <i class="bx bx-plus text-xl" aria-hidden="true" />
         Nouvelle facture
