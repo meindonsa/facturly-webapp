@@ -37,7 +37,7 @@ onMounted(initForm)
       </div>
 
       <!-- Logo -->
-      <section>
+      <section v-if="company != null">
         <LogoUpload />
       </section>
 

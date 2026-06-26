@@ -43,7 +43,7 @@ export function clearTokens(): void {
   storage.removeItem(KEYS.REFRESH_TOKEN)
   storage.removeItem(KEYS.EXPIRES_AT)
   storage.removeItem(USER_CACHE_KEY)
-  storage.removeItem(USER_CACHE_KEY)
+  storage.removeItem(COMPANY_CACHE_KEY)
 }
 
 
