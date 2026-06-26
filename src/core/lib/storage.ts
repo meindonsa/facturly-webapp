@@ -1,6 +1,8 @@
 import { SecurityStorage } from '@meindonsa/security-storage'
 const storage = new SecurityStorage()
 
+export const USER_CACHE_KEY = 'fct_user'
+export const COMPANY_CACHE_KEY = 'fct_company'
 const KEYS = {
   ACCESS_TOKEN: 'fct_access_token',
   REFRESH_TOKEN: 'fct_refresh_token',
@@ -40,8 +42,22 @@ export function clearTokens(): void {
   storage.removeItem(KEYS.ACCESS_TOKEN)
   storage.removeItem(KEYS.REFRESH_TOKEN)
   storage.removeItem(KEYS.EXPIRES_AT)
+  storage.removeItem(USER_CACHE_KEY)
+  storage.removeItem(USER_CACHE_KEY)
 }
 
+
+export function removeItem(key: string): void {
+  storage.removeItem(key)
+}
+
+export function saveItem(key: string, data: any): void {
+  storage.setItem(key, data);
+}
+
+export function getItem(key: string) {
+  return storage.getItem(key);
+}
 // ── Helpers ──────────────────────────────────────────────────
 
 /** Retourne true si le access token est expiré ou absent */

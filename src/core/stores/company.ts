@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import api from '@/core/lib/api'
 import { extractMessage } from '@/core/lib/error'
 import type { Company, CompanyPayload, CompanyUpdatePayload } from '@/shared/types'
+import { COMPANY_CACHE_KEY, getItem, saveItem } from '@/core/lib/storage.ts'
 
 // ============================================================
 // STORE COMPANY — entreprise de l'utilisateur courant
@@ -24,9 +25,15 @@ export const useCompanyStore = defineStore('company', () => {
     loading.value = true
     error.value = null
     try {
+      const cached = getItem(COMPANY_CACHE_KEY) as Company | null
+      if (cached) {
+        company.value = cached
+        return
+      }
       const { data } = await api.get<{ data: Company[] }>('/api/db/companies')
       // Un user = une company (contrainte unique owner_id)
       company.value = data.data[0] ?? null
+      saveItem(COMPANY_CACHE_KEY, company.value)
     } catch (err: unknown) {
       error.value = extractMessage(err) ?? "Impossible de charger l'entreprise."
     } finally {
@@ -40,6 +47,7 @@ export const useCompanyStore = defineStore('company', () => {
     try {
       const { data } = await api.post<Company[]>('/api/db/companies', payload)
       company.value = data[0] ?? null
+      saveItem(COMPANY_CACHE_KEY, company.value)
     } catch (err: unknown) {
       error.value = extractMessage(err) ?? "Impossible de créer l'entreprise."
       throw err
@@ -55,6 +63,7 @@ export const useCompanyStore = defineStore('company', () => {
     try {
       const { data } = await api.patch<Company>(`/api/db/companies/${company.value.id}`, payload)
       company.value = data
+      saveItem(COMPANY_CACHE_KEY, company.value)
     } catch (err: unknown) {
       error.value = extractMessage(err) ?? "Impossible de mettre à jour l'entreprise."
       throw err

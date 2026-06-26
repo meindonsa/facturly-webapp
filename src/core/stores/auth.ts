@@ -1,14 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import api from '@/core/lib/api'
-import { saveTokens, clearTokens, getAccessToken } from '@/core/lib/storage'
+import {
+  saveTokens,
+  clearTokens,
+  getAccessToken,
+  removeItem,
+  USER_CACHE_KEY,
+  saveItem,
+  getItem,
+} from '@/core/lib/storage'
 import { extractMessage } from '@/core/lib/error'
 import type {
   AuthUser,
   LoginPayload,
   RegisterPayload,
   LoginResponse,
-  AuthTokens,
 } from '@/shared/types'
 
 // ============================================================
@@ -73,16 +80,27 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       user.value = null
       clearTokens()
+      removeItem(USER_CACHE_KEY)
     }
   }
 
-  async function fetchMe(): Promise<void> {
+  async function fetchMe(force = false): Promise<void> {
+    // Lire depuis le cache d'abord
+    if (!force) {
+      const cached = getItem(USER_CACHE_KEY) as AuthUser | null
+      if (cached) {
+        user.value = cached
+        return
+      }
+    }
     try {
       const { data } = await api.get<AuthUser>('/api/auth/me')
       user.value = data
+      saveItem(USER_CACHE_KEY, data)
     } catch {
       user.value = null
       clearTokens()
+      removeItem(USER_CACHE_KEY)
     }
   }
 
