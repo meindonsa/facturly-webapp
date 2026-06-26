@@ -1,5 +1,5 @@
 import type { RouteLocationNormalized } from 'vue-router'
-import { isAuthenticated } from '@/core/lib/storage'
+import { clearTokens, isAuthenticated } from '@/core/lib/storage'
 
 // ============================================================
 // GUARDS — protection des routes
@@ -11,6 +11,7 @@ import { isAuthenticated } from '@/core/lib/storage'
  */
 export function authGuard(to: RouteLocationNormalized) {
   if (!isAuthenticated()) {
+    clearTokens()
     return {
       name: 'login',
       query: { redirect: to.fullPath },
