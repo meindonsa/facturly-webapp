@@ -35,7 +35,7 @@ export function useProfile() {
   )
 
   function initForm() {
-    form.value.full_name = (authStore.user?.metadata?.full_name as string) ?? ''
+    form.value.full_name = (authStore.user?.metadata?.display_name as string) || ''
   }
 
   async function submitProfile(): Promise<void> {
