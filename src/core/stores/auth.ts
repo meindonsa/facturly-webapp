@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = computed(() => !!user.value && !!getAccessToken())
   const isAdmin = computed(() => user.value?.role === 'admin')
   const displayName = computed(
-    () => (user.value?.metadata?.full_name as string | null) ?? user.value?.email ?? 'Utilisateur',
+    () => (user.value?.metadata?.display_name as string | null) ?? user.value?.email ?? 'Utilisateur',
   )
 
   // ── Actions ───────────────────────────────────────────────
