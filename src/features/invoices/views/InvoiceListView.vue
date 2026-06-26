@@ -6,10 +6,11 @@ import { useInvoice } from '../composables/useInvoice'
 import InvoiceCard from '../components/InvoiceCard.vue'
 import AppLoader from '@/shared/components/AppLoader.vue'
 import AppEmpty from '@/shared/components/AppEmpty.vue'
+import { useCompany } from '@/features/company/composables/useCompany..ts'
 
 const router = useRouter()
 const { loading, error, statusFilter, filteredInvoices, fetchInvoices } = useInvoice()
-
+const { company } = useCompany()
 onMounted(fetchInvoices)
 
 const filters: { label: string; value: string }[] = [
@@ -28,8 +29,10 @@ const filters: { label: string; value: string }[] = [
       <template #actions>
         <button
           class="icon-btn"
+          :class="company == null ? 'cursor-not-allowed' : ''"
           aria-label="Nouvelle facture"
-          @click="router.push('/invoices/create')"
+          :disabled="company == null"
+          @click="company == null ? null : router.push('/invoices/create')"
         >
           <i class="bx bx-plus text-lg" aria-hidden="true" />
         </button>
@@ -76,7 +79,11 @@ const filters: { label: string; value: string }[] = [
         "
       >
         <template v-if="statusFilter === 'all'" #action>
-          <button class="btn btn-primary text-sm" @click="router.push('/invoices/create')">
+          <button
+            :class="company == null ? 'cursor-not-allowed' : ''"
+            class="btn btn-primary text-sm"
+            @click="company == null ? null : router.push('/invoices/create')"
+          >
             <i class="bx bx-plus" aria-hidden="true" />
             Nouvelle facture
           </button>

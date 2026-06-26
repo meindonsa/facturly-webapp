@@ -15,9 +15,10 @@ const { loading, error, statistics, recentInvoices, formatFCFA } = useHome()
     <!-- Topbar -->
     <AppTopbar show-greeting>
       <template #actions>
-        <button class="icon-btn" aria-label="Notifications">
+        <button v-if="false" class="icon-btn" aria-label="Notifications">
           <i class="bx bx-bell text-lg" aria-hidden="true" />
         </button>
+
         <button class="icon-btn" aria-label="Paramètres" @click="router.push('/profile')">
           <i class="bx bx-cog text-lg" aria-hidden="true" />
         </button>
@@ -68,14 +69,6 @@ const { loading, error, statistics, recentInvoices, formatFCFA } = useHome()
         </div>
         <RecentInvoiceList :invoices="recentInvoices" />
       </section>
-    </div>
-
-    <!-- FAB -->
-    <div class="px-4 pb-4 mt-auto">
-      <button class="fab w-full" @click="router.push('/invoices/create')">
-        <i class="bx bx-plus text-xl" aria-hidden="true" />
-        Nouvelle facture
-      </button>
     </div>
   </div>
 </template>
