@@ -1,16 +1,29 @@
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios'
 import api from './api'
-import { getAccessToken, getRefreshToken, saveTokens, clearTokens, isTokenExpired } from './storage'
+import {
+  getAccessToken,
+  getRefreshToken,
+  saveTokens,
+  clearTokens,
+  isTokenExpired,
+  clear,
+} from './storage'
 
 // ============================================================
 // INTERCEPTORS
 // Appelé une seule fois dans main.ts via setupInterceptors()
 // ============================================================
 
+// Vide tokens + cache SecurityStorage
+function clearAll(): void {
+  clearTokens()
+  clear();
+}
+
 let isRefreshing = false
 let pendingQueue: Array<{
   resolve: (token: string) => void
-  reject: (err: unknown) => void
+  reject:  (err: unknown) => void
 }> = []
 
 function processPendingQueue(error: unknown, token: string | null) {
@@ -22,6 +35,7 @@ function processPendingQueue(error: unknown, token: string | null) {
 }
 
 export function setupInterceptors(onLogout: () => void): void {
+
   // ── Request : injection du Bearer ──────────────────────────
   api.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
@@ -38,7 +52,7 @@ export function setupInterceptors(onLogout: () => void): void {
 
       return config
     },
-    (error) => Promise.reject(error),
+    (error) => Promise.reject(error)
   )
 
   // ── Response : gestion du 401 ──────────────────────────────
@@ -74,7 +88,7 @@ export function setupInterceptors(onLogout: () => void): void {
       }
 
       return Promise.reject(error)
-    },
+    }
   )
 }
 
@@ -91,20 +105,20 @@ async function attemptRefresh(onLogout: () => void): Promise<string | null> {
 
   try {
     const { data } = await api.post<{
-      accessToken: string
+      accessToken:  string
       refreshToken: string
-      expiresAt: number
+      expiresAt:    number
     }>('/api/auth/refresh', { refreshToken })
 
     saveTokens({
-      accessToken: data.accessToken,
+      accessToken:  data.accessToken,
       refreshToken: data.refreshToken,
-      expiresAt: data.expiresAt,
+      expiresAt:    data.expiresAt,
     })
 
     return data.accessToken
   } catch {
-    clearTokens()
+    clearAll()
     onLogout()
     return null
   } finally {
