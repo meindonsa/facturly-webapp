@@ -58,6 +58,10 @@ export function saveItem(key: string, data: any): void {
 export function getItem(key: string) {
   return storage.getItem(key);
 }
+
+export function clear(){
+  storage.clear();
+}
 // ── Helpers ──────────────────────────────────────────────────
 
 /** Retourne true si le access token est expiré ou absent */
