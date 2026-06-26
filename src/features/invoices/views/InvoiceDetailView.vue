@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import AppTopbar from '@/core/layout/AppTopbar.vue'
 import { useInvoice } from '../composables/useInvoice'
 import AppLoader from '@/shared/components/AppLoader.vue'
 import AppBadge from '@/shared/components/AppBadge.vue'
+import api from '@/core/lib/api.ts'
 
 const props = defineProps<{ id: string }>()
 const router = useRouter()
@@ -19,6 +20,26 @@ const {
   deleteInvoice,
   formatFCFA,
 } = useInvoice()
+
+const downloading = ref(false)
+
+async function downloadPdf(): Promise<void> {
+  downloading.value = true
+  try {
+    const res = await api.get(`/api/invoices/${props.id}/pdf`, {
+      responseType: 'blob',
+      timeout: 60_000, // 60s pour la génération PDF
+    })
+    const url = URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${invoice.value?.invoice_number ?? 'facture'}.pdf`
+    link.click()
+    URL.revokeObjectURL(url)
+  } finally {
+    downloading.value = false
+  }
+}
 
 onMounted(() => fetchInvoice(props.id))
 
@@ -36,6 +57,19 @@ function formatDate(date: string) {
     <!-- Topbar -->
     <AppTopbar :title="invoice?.invoice_number ?? '...'" show-back>
       <template #actions>
+        <button
+          v-if="invoice"
+          class="icon-btn"
+          aria-label="Télécharger PDF"
+          :disabled="downloading"
+          @click="downloadPdf"
+        >
+          <i
+            :class="downloading ? 'bx bx-loader-alt bx-spin' : 'bx bx-download'"
+            class="text-lg"
+            aria-hidden="true"
+          />
+        </button>
         <button
           v-if="invoice"
           class="icon-btn"

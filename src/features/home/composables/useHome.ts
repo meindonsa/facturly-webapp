@@ -47,7 +47,7 @@ export function useHome() {
       countMonth: monthInvoices.length,
 
       countOverdue: invoices.value.filter(
-        (inv) => inv.status === 'sent' && !!inv.due_at && inv.due_at < today,
+        (inv) => inv.status === 'sent',
       ).length,
     }
   })
