@@ -80,10 +80,15 @@ export function useAuth() {
     await router.push('/auth/login')
   }
 
+  function clearError(): void {
+    authStore.clearError()
+  }
+
   return {
     // State store
     loading: computed(() => authStore.loading),
     error: computed(() => authStore.error),
+    clearError,
 
     // Login
     loginForm,

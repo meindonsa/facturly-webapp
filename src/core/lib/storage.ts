@@ -46,21 +46,20 @@ export function clearTokens(): void {
   storage.removeItem(COMPANY_CACHE_KEY)
 }
 
-
 export function removeItem(key: string): void {
   storage.removeItem(key)
 }
 
 export function saveItem(key: string, data: any): void {
-  storage.setItem(key, data);
+  storage.setItem(key, data)
 }
 
 export function getItem(key: string) {
-  return storage.getItem(key);
+  return storage.getItem(key)
 }
 
-export function clear(){
-  storage.clear();
+export function clear() {
+  storage.clear()
 }
 // ── Helpers ──────────────────────────────────────────────────
 
@@ -74,4 +73,8 @@ export function isTokenExpired(): boolean {
 
 export function isAuthenticated(): boolean {
   return !!getAccessToken() && !isTokenExpired()
+}
+
+export function hasNotCompany() {
+  return getItem(COMPANY_CACHE_KEY) == null;
 }

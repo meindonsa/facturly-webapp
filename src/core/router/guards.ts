@@ -1,5 +1,5 @@
 import type { RouteLocationNormalized } from 'vue-router'
-import { clearTokens, isAuthenticated } from '@/core/lib/storage'
+import { clearTokens, hasNotCompany, isAuthenticated } from '@/core/lib/storage'
 
 // ============================================================
 // GUARDS — protection des routes
@@ -26,5 +26,11 @@ export function authGuard(to: RouteLocationNormalized) {
 export function guestGuard() {
   if (isAuthenticated()) {
     return { name: 'dashboard' }
+  }
+}
+
+export function companyGuard() {
+  if (hasNotCompany()) {
+    return { name: 'company' }
   }
 }

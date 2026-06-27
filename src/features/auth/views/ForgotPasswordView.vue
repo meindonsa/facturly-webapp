@@ -3,9 +3,13 @@ import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
 import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const { forgotEmail, forgotSent, loading, submitForgotPassword } = useAuth()
+onMounted(() => {
+  useAuth().clearError()
+})
 </script>
 
 <template>
