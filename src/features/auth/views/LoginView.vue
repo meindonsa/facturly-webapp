@@ -2,8 +2,13 @@
 import { useAuth } from '../composables/useAuth'
 import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
+import { onMounted } from 'vue'
 
-const { loginForm, showPassword, loading, error, submitLogin } = useAuth()
+const { loginForm, showPassword, loading, error, submitLogin } = useAuth();
+
+onMounted(() => {
+  useAuth().clearError()
+})
 </script>
 
 <template>
