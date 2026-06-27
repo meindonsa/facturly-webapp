@@ -17,6 +17,7 @@ interface CompanyForm {
 
 export function useCompany() {
   const companyStore = useCompanyStore()
+  const created = ref<boolean>(false)
 
   const form = ref<CompanyForm>({
     name: '',
@@ -56,6 +57,7 @@ export function useCompany() {
       await companyStore.updateCompany(form.value)
     } else {
       await companyStore.createCompany(form.value)
+      setActionDid(true)
     }
     if (!companyStore.error) {
       isDirty.value = false
@@ -63,15 +65,21 @@ export function useCompany() {
     }
   }
 
+  function setActionDid(data: boolean = false) {
+    created.value = data
+  }
+
   return {
     form,
     isDirty,
     success,
+    created,
     loading: computed(() => companyStore.loading),
     error: computed(() => companyStore.error),
     company: computed(() => companyStore.company),
     initForm,
     markDirty,
     submit,
+    setActionDid,
   }
 }

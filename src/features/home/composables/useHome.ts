@@ -1,7 +1,8 @@
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import api from '@/core/lib/api'
 import { formatFCFA } from '@/shared/types'
 import type { Invoice } from '@/shared/types'
+import { useCompanyStore } from '@/core/stores/company.ts'
 
 // ============================================================
 // useHome — statistiques et factures récentes du dashboard
@@ -29,6 +30,7 @@ export function useHome() {
     countOverdue:   0,
     countTotal:     0,
   })
+  const companyStore = useCompanyStore()
   const recentInvoices = ref<DashboardResponse['invoices']>([])
   const loading        = ref(false)
   const error          = ref<string | null>(null)
@@ -36,15 +38,19 @@ export function useHome() {
   async function fetchDashboard(): Promise<void> {
     loading.value = true
     error.value   = null
-    try {
-      const { data } = await api.get<DashboardResponse>('/api/dashboard')
-      statistics.value     = data.statistics
-      recentInvoices.value = data.invoices
-    } catch {
-      error.value = 'Impossible de charger le tableau de bord.'
-    } finally {
-      loading.value = false
+    if (!companyStore.company){
+      loading.value = false;
+      return;
     }
+      try {
+        const { data } = await api.get<DashboardResponse>('/api/dashboard')
+        statistics.value = data.statistics
+        recentInvoices.value = data.invoices
+      } catch {
+        error.value = 'Impossible de charger le tableau de bord.'
+      } finally {
+        loading.value = false
+      }
   }
 
   onMounted(fetchDashboard)
@@ -54,6 +60,7 @@ export function useHome() {
     error,
     statistics,
     recentInvoices,
+    company: computed(()=> companyStore.company),
     formatFCFA,
   }
 }

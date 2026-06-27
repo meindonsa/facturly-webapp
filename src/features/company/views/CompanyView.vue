@@ -5,14 +5,36 @@ import AppInput from '@/shared/components/AppInput.vue'
 import AppButton from '@/shared/components/AppButton.vue'
 import { useCompany } from '@/features/company/composables/useCompany..ts'
 import LogoUpload from '@/features/company/components/LogoUpload.vue'
+import AppAlert from '@/shared/components/AppAlert.vue'
 
-const { form, isDirty, success, loading, error, company, initForm, markDirty, submit } =
-  useCompany()
+const {
+  form,
+  isDirty,
+  success,
+  loading,
+  error,
+  company,
+  created,
+  initForm,
+  markDirty,
+  submit,
+  setActionDid,
+} = useCompany()
 
 onMounted(initForm)
 </script>
 
 <template>
+  <AppAlert
+    v-if="created"
+    type="success"
+    title="Super !"
+    message="Vous pouvez désormais enregistrer le logo de votre entreprise plus haut et créer vos factures."
+    confirm-text="OK"
+    :show-cancel="false"
+    @confirm="setActionDid()"
+  />
+
   <div class="flex flex-col min-h-full">
     <!-- Topbar -->
     <AppTopbar title="Mon entreprise" />

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard, companyGuard, guestGuard } from '@/core/router/guards.ts'
+import { authGuard, guestGuard } from '@/core/router/guards.ts'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,7 +47,6 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'dashboard',
-          beforeEnter: companyGuard,
           component: () => import('@/features/home/views/HomeView.vue'),
         },
 
@@ -55,26 +54,22 @@ const router = createRouter({
         {
           path: 'invoices',
           name: 'invoices',
-          beforeEnter: companyGuard,
           component: () => import('@/features/invoices/views/InvoiceListView.vue'),
         },
         {
           path: 'invoices/create',
           name: 'invoices-create',
-          beforeEnter: companyGuard,
           component: () => import('@/features/invoices/views/InvoiceCreateView.vue'),
         },
         {
           path: 'invoices/:id',
           name: 'invoices-detail',
-          beforeEnter: companyGuard,
           component: () => import('@/features/invoices/views/InvoiceDetailView.vue'),
           props: true,
         },
         {
           path: 'invoices/:id/edit',
           name: 'invoices-edit',
-          beforeEnter: companyGuard,
           component: () => import('@/features/invoices/views/InvoiceCreateView.vue'),
           props: (route) => ({ id: route.params.id, isEdit: true }),
         },
