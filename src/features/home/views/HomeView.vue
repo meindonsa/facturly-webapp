@@ -5,12 +5,22 @@ import { useHome } from '../composables/useHome'
 import MetricCard from '../components/MetricCard.vue'
 import RecentInvoiceList from '../components/RecentInvoiceList.vue'
 import AppLoader from '@/shared/components/AppLoader.vue'
+import AppAlert from '@/shared/components/AppAlert.vue'
 
 const router = useRouter()
-const { loading, error, statistics, recentInvoices, formatFCFA } = useHome()
+const { loading, error, statistics, recentInvoices, formatFCFA, company } = useHome()
 </script>
 
 <template>
+  <AppAlert
+    v-if="!company"
+    type="warning"
+    title="Entreprise non configurée "
+    message="Enregistrez vos informations d'entreprise avant de créer une facture."
+    confirm-text="Configurer mon entreprise"
+    :show-cancel="false"
+    @confirm="router.push('/company')"
+  />
   <div class="flex flex-col min-h-full">
     <!-- Topbar -->
     <AppTopbar show-greeting>

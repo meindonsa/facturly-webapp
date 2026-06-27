@@ -7,6 +7,7 @@ import InvoiceCard from '../components/InvoiceCard.vue'
 import AppLoader from '@/shared/components/AppLoader.vue'
 import AppEmpty from '@/shared/components/AppEmpty.vue'
 import { useCompany } from '@/features/company/composables/useCompany..ts'
+import AppAlert from '@/shared/components/AppAlert.vue'
 
 const router = useRouter()
 const { loading, error, statusFilter, filteredInvoices, fetchInvoices } = useInvoice()
@@ -23,6 +24,15 @@ const filters: { label: string; value: string }[] = [
 </script>
 
 <template>
+  <AppAlert
+    v-if="!company"
+    type="warning"
+    title="Entreprise non configurée "
+    message="Enregistrez vos informations d'entreprise avant de créer une facture."
+    confirm-text="Configurer mon entreprise"
+    :show-cancel="false"
+    @confirm="router.push('/company')"
+  />
   <div class="flex flex-col min-h-full">
     <!-- Topbar -->
     <AppTopbar title="Factures">

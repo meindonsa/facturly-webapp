@@ -28,9 +28,3 @@ export function guestGuard() {
     return { name: 'dashboard' }
   }
 }
-
-export function companyGuard() {
-  if (hasNotCompany()) {
-    return { name: 'company' }
-  }
-}
