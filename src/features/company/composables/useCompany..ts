@@ -10,8 +10,8 @@ interface CompanyForm {
   email: string | null
   phone: string
   address: string | null
-  city: string | null
-  country: string | null
+  city: string
+  country: string
   currency: string
 }
 
@@ -24,8 +24,8 @@ export function useCompany() {
     email: null,
     phone: '',
     address: null,
-    city: null,
-    country: null,
+    city: '',
+    country: '',
     currency: 'XAF',
   })
 
@@ -41,8 +41,8 @@ export function useCompany() {
       email: c.email ?? null,
       phone: c.phone ?? '',
       address: c.address ?? null,
-      city: c.city ?? null,
-      country: c.country ?? null,
+      city: c.city ?? '',
+      country: c.country ?? '',
       currency: c.currency ?? 'XAF',
     }
   }
