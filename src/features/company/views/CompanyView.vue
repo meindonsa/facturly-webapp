@@ -108,12 +108,14 @@ onMounted(initForm)
           />
           <div class="grid grid-cols-2 gap-3">
             <AppInput
+              required
               v-model="form.city"
               label="Ville"
               placeholder="Libreville"
               @update:model-value="markDirty"
             />
             <AppInput
+              required
               v-model="form.country"
               label="Pays"
               placeholder="Gabon"
